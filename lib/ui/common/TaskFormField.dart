@@ -2,26 +2,28 @@ import 'package:flutter/material.dart';
 
 typedef Validator = String? Function (String? text);
 
-class AppFormField extends StatefulWidget {
+class TaskFormField extends StatefulWidget {
   String title;
+  int? lines;
   String hint;
   TextInputType keyboardType ;
   bool securedPassword ;
   Validator? validator = null;
   TextEditingController? controller = null;
-  AppFormField({required this.title,
+  TaskFormField({required this.title,
     required this.hint,
    this.keyboardType = TextInputType.text,
     this.securedPassword = false,
     this.validator,
-    this.controller
+    this.controller,
+    this.lines
   });
 
   @override
-  State<AppFormField> createState() => _AppFormFieldState();
+  State<TaskFormField> createState() => _TaskFormFieldState();
 }
 
-class _AppFormFieldState extends State<AppFormField> {
+class _TaskFormFieldState extends State<TaskFormField> {
   bool isVisibleText = true;
 
   @override
@@ -29,6 +31,7 @@ class _AppFormFieldState extends State<AppFormField> {
     super.initState();
     isVisibleText = widget.securedPassword;
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -36,13 +39,13 @@ class _AppFormFieldState extends State<AppFormField> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(widget.title,
-          style: Theme.of(context).textTheme.titleSmall,),
-          SizedBox(height: 12,),
+
           TextFormField(
+            maxLines: widget.lines,
             validator: widget.validator,
             decoration: InputDecoration(
-
+              floatingLabelBehavior: FloatingLabelBehavior.auto,
+              label: Text(widget.title,style: TextStyle(color: Colors.blue),),
               errorStyle: TextStyle(
                 color: Colors.red,
                 fontSize: 16

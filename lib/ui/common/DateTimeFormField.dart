@@ -2,26 +2,28 @@ import 'package:flutter/material.dart';
 
 typedef Validator = String? Function (String? text);
 
-class AppFormField extends StatefulWidget {
+class DateTimeFormField extends StatefulWidget {
   String title;
-  String hint;
+   String hint;
   TextInputType keyboardType ;
   bool securedPassword ;
   Validator? validator = null;
   TextEditingController? controller = null;
-  AppFormField({required this.title,
-    required this.hint,
+  VoidCallback? onclick;
+  DateTimeFormField({required this.title,
    this.keyboardType = TextInputType.text,
     this.securedPassword = false,
     this.validator,
-    this.controller
+    this.controller,
+    this.onclick,
+    required this.hint
   });
 
   @override
-  State<AppFormField> createState() => _AppFormFieldState();
+  State<DateTimeFormField> createState() => _DateTimeFormFieldState();
 }
 
-class _AppFormFieldState extends State<AppFormField> {
+class _DateTimeFormFieldState extends State<DateTimeFormField> {
   bool isVisibleText = true;
 
   @override
@@ -37,12 +39,20 @@ class _AppFormFieldState extends State<AppFormField> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(widget.title,
-          style: Theme.of(context).textTheme.titleSmall,),
+          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+            color: Colors.blue
+          ),),
           SizedBox(height: 12,),
           TextFormField(
+
+            enableInteractiveSelection: false,
+            focusNode: FocusNode(),
+            onTap:   () {
+              widget.onclick?.call();
+            },
             validator: widget.validator,
             decoration: InputDecoration(
-
+             hintText: widget.hint,
               errorStyle: TextStyle(
                 color: Colors.red,
                 fontSize: 16
@@ -57,12 +67,9 @@ class _AppFormFieldState extends State<AppFormField> {
                     isVisibleText ? Icons.visibility_off_outlined : Icons.visibility),
               )
               :null,
-              border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              ),
-              filled: true,
-              fillColor: Colors.white,
-              hintText: widget.hint,
+
+
+
               hintStyle: Theme.of(context).textTheme
                 .titleSmall?.copyWith(
                 color: Colors.black
